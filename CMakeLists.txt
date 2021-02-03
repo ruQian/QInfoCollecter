@@ -1,7 +1,14 @@
 # CMake 版本要求 (最低 3.1)
 cmake_minimum_required (VERSION 3.1)
+#指定windows SDK 版本号
+set(CMAKE_SYSTEM_VERSION 10)
+
+
 # 项目名称（建议修改）
-project(QInfoCollecter)
+project (QInfoCollecter)
+
+
+
 # 设置项目的 C++ 标准（mirai-cpp所需的最低标准是c++11，建议使用最新的cpp标准）
 set(CMAKE_CXX_STANDARD 11)
 # 不要构建 mirai-cpp 自带的 examples
@@ -12,8 +19,8 @@ add_subdirectory(mirai-cpp)
 
 # 源码以 UTF-8 编码保存，使用 MSVC 编译器时需要加编译参数提供支持
 if(MSVC)
-    add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
-    add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+    add_compile_options("$<$<C_COMPILER_ID:MSVC>:/source-charset:utf-8>")
+    add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>")
     message(STATUS "optional: /UTF-8")   
 endif(MSVC)
 
