@@ -9,7 +9,7 @@ std::string string_To_UTF8(const std::string& str);
 
 
 
-inline string operator "" _UTF8(const char* v)
+inline string operator "" _UTF8(const char* v, size_t n)
 {
 	return UTF8_To_string(v);
 }
