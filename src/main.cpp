@@ -45,7 +45,7 @@ int main()
 			try
 			{
 				string plain = m.MessageChain.GetPlainText();
-				if (plain == "/anti-recall enabled." || plain == "撤回没用")
+				if (plain == "/anti-recall enabled." || plain == "撤回没用"_UTF8)
 				{
 					groups[m.Sender.Group.GID] = true;
 					m.Reply(MessageChain().Plain("撤回也没用，我都看到了"));

@@ -7,3 +7,10 @@ std::string UTF8_To_string(const std::string& str);
 // std:string转UTF8
 std::string string_To_UTF8(const std::string& str);
 
+
+
+inline string operator "" _UTF8(const char* v)
+{
+	return UTF8_To_string(v);
+}
+
