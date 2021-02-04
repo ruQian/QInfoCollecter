@@ -9,6 +9,57 @@
 #include <mirai.h>
 //#include "myheader.h"
 
+
+// UTF8转std:string
+// 转换过程：先将utf8转双字节Unicode编码，再通过WideCharToMultiByte将宽字符转换为多字节。
+std::string UTF8_To_string(const std::string& str) 
+{ 
+    int nwLen = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, NULL, 0); 
+    wchar_t* pwBuf = new wchar_t[nwLen + 1];    //一定要加1，不然会出现尾巴 
+    memset(pwBuf, 0, nwLen * 2 + 2); 
+    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), pwBuf, nwLen); 
+    int nLen = WideCharToMultiByte(CP_ACP, 0, pwBuf, -1, NULL, NULL, NULL, NULL); 
+    char* pBuf = new char[nLen + 1]; 
+    memset(pBuf, 0, nLen + 1); 
+    WideCharToMultiByte(CP_ACP, 0, pwBuf, nwLen, pBuf, nLen, NULL, NULL);
+
+    std::string strRet = pBuf; 
+
+    delete []pBuf; 
+    delete []pwBuf; 
+    pBuf = NULL; 
+    pwBuf = NULL; 
+
+    return strRet; 
+} 
+
+// std:string转UTF8
+std::string string_To_UTF8(const std::string& str) 
+{ 
+    int nwLen = ::MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, NULL, 0); 
+    wchar_t* pwBuf = new wchar_t[nwLen + 1];    //一定要加1，不然会出现尾巴 
+    ZeroMemory(pwBuf, nwLen * 2 + 2); 
+    ::MultiByteToWideChar(CP_ACP, 0, str.c_str(), str.length(), pwBuf, nwLen); 
+    int nLen = ::WideCharToMultiByte(CP_UTF8, 0, pwBuf, -1, NULL, NULL, NULL, NULL); 
+    char* pBuf = new char[nLen + 1]; 
+    ZeroMemory(pBuf, nLen + 1); 
+    ::WideCharToMultiByte(CP_UTF8, 0, pwBuf, nwLen, pBuf, nLen, NULL, NULL); 
+
+    std::string strRet(pBuf); 
+
+    delete []pwBuf; 
+    delete []pBuf; 
+    pwBuf = NULL; 
+    pBuf  = NULL; 
+
+    return strRet; 
+} 
+
+
+
+
+
+
 int main()
 {
 	using namespace std;
@@ -19,12 +70,12 @@ int main()
 	system("chcp 65001");
 #endif
 
-	MiraiBot bot("127.0.0.1", 8080);
+	MiraiBot bot("8.131.255.126", 8822);
 	while (true)
 	{
 		try
 		{
-			bot.Auth("mirai-api-http设置的AuthKey", 211000000_qq);
+			bot.Auth("INITKEY7IDHq9QW", 3331720495_qq);
 			break;
 		}
 		catch (const std::exception& ex)
@@ -78,6 +129,18 @@ int main()
 			{
 				cout << ex.what() << endl;
 			}
+		})
+		.On<FriendMessage>(
+		[&](FriendMessage fm)
+		{
+			string plain = fm.MessageChain.GetPlainText();
+			string plain2 = string_To_UTF8("你好"); 
+			if(plain == plain2)
+			{
+			cout<<plain2<<" = "<<plain<<endl;
+			}
+			cout<<plain<<endl;
+			fm.Reply("hello, " + fm.MessageChain);
 		});
 
 
