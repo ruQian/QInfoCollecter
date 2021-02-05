@@ -36,14 +36,38 @@ int main()
 	}
 	cout << "Bot Working..." << endl;
 
+
+	// 获取群组列表
+	auto groups = bot.GetGroupList();
+	int i = 1;
+	for (const auto& g : groups)
+	{
+		cout << (i++) << ". " << g.GID << ", " << g.Name << ", " << GroupPermissionStr(g.Permission) << endl;
+		// 获取群成员列表
+		//auto gMembers = bot.GetGroupMembers(g.GID);
+		//for (const auto& gMem : gMembers)
+		//{
+		//	cout << " | " << gMem.QQ << ", " << gMem.MemberName << ", " << GroupPermissionStr(gMem.Permission);
+			// 获取群成员的信息（群名片、群头衔）
+		//	auto info = bot.GetGroupMemberInfo(gMem.Group.GID, gMem.QQ);
+		//	cout << ", 1: " << (info.Name.empty() ? "None" : info.Name)
+		//		 << ", 2: " << (info.SpecialTitle.empty() ? "None" : info.SpecialTitle) << endl;
+		//}
+	}
+
+
+
+
+
 	// 用map记录哪些群启用了“反撤回”功能
-	map<GID_t, bool> groups;
+	map<GID_t, bool> groupMap;
 
 	bot.On<GroupMessage>(
 		[&](GroupMessage m)
 		{
 			try
 			{
+				/*
 				string plain = m.MessageChain.GetPlainText();
 				if (plain == "/anti-recall enabled." || plain == "撤回没用"_UTF8)
 				{
@@ -56,7 +80,7 @@ int main()
 					groups[m.Sender.Group.GID] = false;
 					m.Reply(MessageChain().Plain("撤回有用"));
 					return;
-				}
+				}*/
 			}
 			catch (const std::exception& ex)
 			{
@@ -70,10 +94,11 @@ int main()
 		{
 			try
 			{
+				/*
 				if (!groups[e.Group.GID]) return;
 				auto recalled_mc = bot.GetGroupMessageFromId(e.MessageId).MessageChain;
 				auto mc = "刚刚有人撤回了: " + recalled_mc;
-				bot.SendMessage(e.Group.GID, mc);
+				bot.SendMessage(e.Group.GID, mc);*/
 			}
 			catch (const std::exception& ex)
 			{
@@ -83,6 +108,7 @@ int main()
 		.On<FriendMessage>(
 		[&](FriendMessage fm)
 		{
+			/*
 			string plain = fm.MessageChain.GetPlainText();
 			string plain2 = string_To_UTF8("你好"); 
 			if(plain == plain2)
@@ -90,7 +116,7 @@ int main()
 			cout<<plain2<<" = "<<plain<<endl;
 			}
 			cout<<plain<<endl;
-			fm.Reply("hello, " + fm.MessageChain);
+			fm.Reply("hello, " + fm.MessageChain);*/
 		});
 
 
