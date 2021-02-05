@@ -17,12 +17,17 @@ set(MIRAI_CPP_BUILD_EXAMPLES OFF CACHE BOOL "Build examples" FORCE)
 add_subdirectory(mirai-cpp)
 
 
+message(STATUS "------------平台-----------")   
 # 源码以 UTF-8 编码保存，使用 MSVC 编译器时需要加编译参数提供支持
 if(MSVC)
     add_compile_options("$<$<C_COMPILER_ID:MSVC>:/source-charset:utf-8>")
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>")
+    message(STATUS "windows")   
     message(STATUS "optional: /UTF-8")   
+else()
+message(STATUS "linux")   
 endif(MSVC)
+message(STATUS "------------平台-----------")   
 
 # 要添加.cpp源文件，请修改这一行
 # 例如：add_executable(${PROJECT_NAME} src/main.cpp src/a.cpp src/b.cpp)
