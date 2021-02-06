@@ -31,7 +31,7 @@ message(STATUS "------------平台-----------")
 
 # 要添加.cpp源文件，请修改这一行
 # 例如：add_executable(${PROJECT_NAME} src/main.cpp src/a.cpp src/b.cpp)
-add_executable(${PROJECT_NAME} src/main.cpp src/QUtil.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/QUtil.cpp src/QCollectorServerApi.cpp)
 
 
 # 设置头文件目录
