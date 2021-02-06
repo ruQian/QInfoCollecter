@@ -8,6 +8,7 @@
 #include <map>
 #include <mirai.h>
 #include "QUtil.h"
+#include "QCollectorServerApi.h"
 //#include "myheader.h"
 
 int main()
@@ -19,7 +20,7 @@ int main()
 	// 切换代码页，让 CMD 可以显示 UTF-8 字符
 	system("chcp 65001");
 #endif
-
+	//QCollectorServerApi qCollectorServerApi;
 	MiraiBot bot("8.131.255.126", 8822);
 	while (true)
 	{
