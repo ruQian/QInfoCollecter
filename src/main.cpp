@@ -7,7 +7,10 @@
 #include <iostream>
 #include <map>
 #include <mirai.h>
+#include <time.h>  
 #include "QUtil.h"
+#include <chrono>
+#include <iomanip>
 #include "QCollectorServerApi.h"
 #include "mirai/third-party/nlohmann/json.hpp"
 //#include "myheader.h"
@@ -71,29 +74,46 @@ int main()
 			try
 			{
 				string plain = m.MessageChain.GetPlainText();
-				/*
-				string plain = m.MessageChain.GetPlainText();
-				if (plain == "/anti-recall enabled." || plain == "撤回没用"_UTF8)
+
+				//匹配电话号码
+				regex r("\\d{11}");
+				smatch match;
+				bool found = regex_search(plain, match, r);
+				if(found)
 				{
-					groups[m.Sender.Group.GID] = true;
-					m.Reply(MessageChain().Plain("撤回也没用，我都看到了"));
-					return;
+					//上传数据到数据库 暂时这么写 
+					//正则表达式  获取是 人找车  还是 车找人
+					int DOrP = 0;
+					if(plain.find("人找车"_UTF8) != plain.npos ||
+						plain.find("人 找车"_UTF8) != plain.npos ||
+						plain.find("人 找 车"_UTF8) != plain.npos ||
+						plain.find("人找 车"_UTF8)!= plain.npos 
+					)
+					{
+						DOrP = 1;
+					}
+					if(plain.find("车找人"_UTF8) != plain.npos ||
+					plain.find("车 找人"_UTF8) != plain.npos ||
+					plain.find("车找 人"_UTF8) != plain.npos ||
+					plain.find("车 找 人"_UTF8)!= -plain.npos 
+					)
+					{
+						DOrP = 0;
+					}
+					json j;
+					j["rawMessage"] = plain;
+					j["groupid"] = std::to_string((int64_t)m.Sender.Group.GID);
+					j["DOrP"]=DOrP;
+					int64_t ts = m.Timestamp();
+					std::stringstream ss;
+					ss << std::put_time(std::localtime(&ts), "%F UTC%T");
+					std::string str = ss.str();
+					j["telNO"] = match.str();
+					
+					j["messageDate"] = str;
+					std::string s = j.dump(); 
+					qCollectorServerApi.PostQMessageData(s);
 				}
-				if (plain == "/anti-recall disabled." || plain == "撤回有用")
-				{
-					groups[m.Sender.Group.GID] = false;
-					m.Reply(MessageChain().Plain("撤回有用"));
-					return;
-				}*/
-				//上传数据到数据库 暂时这么写 
-				json j;
-				j["rawMessage"] = plain;
-				j["groupid"]="123";
-				j["DOrP"]=1;
-				j["telNO"]="123";
-				j["messageDate"]="2017-12-12";
-				std::string s = j.dump(); 
-				qCollectorServerApi.PostQMessageData(s);
 
 			}
 			catch (const std::exception& ex)
