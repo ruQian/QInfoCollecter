@@ -9,6 +9,7 @@
 #include <mirai.h>
 #include "QUtil.h"
 #include "QCollectorServerApi.h"
+#include "mirai/third-party/nlohmann/json.hpp"
 //#include "myheader.h"
 
 int main()
@@ -20,7 +21,8 @@ int main()
 	// 切换代码页，让 CMD 可以显示 UTF-8 字符
 	system("chcp 65001");
 #endif
-	//QCollectorServerApi qCollectorServerApi;
+	QCollectorServerApi qCollectorServerApi;
+	
 	MiraiBot bot("8.131.255.126", 8822);
 	while (true)
 	{
@@ -68,6 +70,7 @@ int main()
 		{
 			try
 			{
+				string plain = m.MessageChain.GetPlainText();
 				/*
 				string plain = m.MessageChain.GetPlainText();
 				if (plain == "/anti-recall enabled." || plain == "撤回没用"_UTF8)
@@ -82,6 +85,16 @@ int main()
 					m.Reply(MessageChain().Plain("撤回有用"));
 					return;
 				}*/
+				//上传数据到数据库 暂时这么写 
+				json j;
+				j["rawMessage"] = plain;
+				j["groupid"]="123";
+				j["DOrP"]=1;
+				j["telNO"]="123";
+				j["messageDate"]="2017-12-12";
+				std::string s = j.dump(); 
+				qCollectorServerApi.PostQMessageData(s);
+
 			}
 			catch (const std::exception& ex)
 			{

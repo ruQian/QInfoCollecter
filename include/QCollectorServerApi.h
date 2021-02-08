@@ -12,6 +12,7 @@ public:
 public:
     //上传原始信息
     bool PostRawData(const char *path, const std::string &body);
+    bool PostQMessageData(const std::string &body);
 
 
 };
