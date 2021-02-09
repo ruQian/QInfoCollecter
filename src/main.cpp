@@ -142,7 +142,7 @@ int main()
 		.On<FriendMessage>(
 		[&](FriendMessage fm)
 		{
-			/*
+			
 			string plain = fm.MessageChain.GetPlainText();
 			string plain2 = string_To_UTF8("你好"); 
 			if(plain == plain2)
@@ -150,7 +150,7 @@ int main()
 			cout<<plain2<<" = "<<plain<<endl;
 			}
 			cout<<plain<<endl;
-			fm.Reply("hello, " + fm.MessageChain);*/
+			fm.Reply("hello, " + fm.MessageChain);
 		});
 
 
